@@ -59,8 +59,37 @@ app.use(exp.urlencoded({ extended: true }))
    res.redirect("/");
   });
   
+  //edit vlog
+  app.get("/edit/:id",async(req,res)=>{
+    const id = req.params.id
+    //find blog of that id
+    const blog =await blogs.findAll(
+      {
+        where :{
+          id:id
+        }
+      })
+   res.render("editBlog",{blog : blog})
+  })
 
+  app.post("/editBlog/:id",async(req,res)=>{
+   const id = req.params.id
+   const title = req.body.title;
+   const subTitle = req.body.subtitle;
 
+   const description = req.body.description;
+  
+     await blogs.update({
+      title :title,
+      subTitle : subTitle ,
+      description  : description,
+    },{
+        where :{
+          id  : id
+        }
+    })
+    res.redirect("/single/" + id);
+  })
 
 
 
